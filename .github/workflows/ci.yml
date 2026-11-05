@@ -1,0 +1,43 @@
+name: Pruebas del PIA Hotel Costa Azul
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: hotel_costa_azul_ci
+          POSTGRES_USER: hotel_ci
+          POSTGRES_PASSWORD: postgres_ci_temporal
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U hotel_ci -d hotel_costa_azul_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+
+    env:
+      DATABASE_URL: postgresql+psycopg://hotel_ci:postgres_ci_temporal@localhost:5432/hotel_costa_azul_ci
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Validar migraciones sobre PostgreSQL
+        run: alembic upgrade head
+      - name: Ejecutar pruebas y comprobar cobertura >= 80%
+        run: python -m pytest -q --cov=src --cov-report=term-missing --cov-fail-under=80

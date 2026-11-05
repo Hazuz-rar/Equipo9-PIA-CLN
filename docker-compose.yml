@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-hotel_costa_azul}
+      POSTGRES_USER: ${POSTGRES_USER:-hotel_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Configura POSTGRES_PASSWORD en .env}
+    ports:
+      # Evita conflicto con PostgreSQL local, que suele usar 5432.
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  api:
+    build: .
+    environment:
+      APP_ENV: development
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-hotel_user}:${POSTGRES_PASSWORD:?Configura POSTGRES_PASSWORD en .env}@db:5432/${POSTGRES_DB:-hotel_costa_azul}
+    command: sh -c "alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port 8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  tests:
+    build: .
+    profiles: ["test"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-hotel_user}:${POSTGRES_PASSWORD:?Configura POSTGRES_PASSWORD en .env}@db:5432/${POSTGRES_DB:-hotel_costa_azul}
+    command: python -m pytest -q --cov=src --cov-report=term-missing --cov-fail-under=80
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
