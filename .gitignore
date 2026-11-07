@@ -1,25 +1,41 @@
-# Variables de entorno y credenciales
+
+# Variables y secretos
 .env
 .env.*
 !.env.example
 
-# Entorno virtual
+# Entornos virtuales
 .venv/
 venv/
 
-# Archivos temporales de Python
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
 .pytest_cache/
 .coverage
 htmlcov/
+.coverage.*
 
-# Archivos locales y respaldos
+# Archivos de respaldo
+*.bak
+*.bak_profesor
+*.backup
+
+# Bases de datos locales
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos temporales
+*.log
+.DS_Store
+Thumbs.db
+
+# Carpetas pesadas
+node_modules/
+
+# Archivos comprimidos y exportaciones
 *.zip
 *.rar
-*.bak
-*.dump
 *.sql
-
-# Configuración local
-.vscode/
+*.dump

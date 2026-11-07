@@ -3,7 +3,10 @@
 Trazabilidad básica: US-04 (crear/confirmar) y consulta individual de reservas.
 No sustituyen la prueba de concurrencia y disponibilidad de US-25.
 """
-from uuid import uuid4
+from uuid import UUID, uuid4
+
+from src.infrastructure.database.models.room_model import RoomModel
+from src.domain.rooms.entities import RoomStatus
 
 import pytest
 from fastapi.testclient import TestClient
@@ -16,6 +19,9 @@ from src.infrastructure.database.base import Base
 from src.infrastructure.database.models.reservation_model import ReservationModel  # noqa: F401
 from src.main import app
 
+TEST_ROOM_ID = UUID(
+    "728189bc-0653-4d0c-bf5c-e68aa6afca11"
+)
 
 @pytest.fixture
 def client():
@@ -25,6 +31,20 @@ def client():
         poolclass=StaticPool,
     )
     Base.metadata.create_all(engine)
+
+    with Session(engine) as session:
+        session.add(
+            RoomModel(
+                id=TEST_ROOM_ID,
+                number="D-101",
+                room_type="Estándar",
+                capacity=2,
+                base_rate=1250,
+                status=RoomStatus.AVAILABLE,
+            )
+        )
+        session.commit()
+
 
     def override_get_db():
         with Session(engine) as session:
@@ -42,7 +62,7 @@ def client():
 def valid_reservation():
     return {
         "guest_id": str(uuid4()),
-        "room_id": str(uuid4()),
+        "room_id": str(TEST_ROOM_ID),
         "check_in": "2026-12-10",
         "check_out": "2026-12-13",
     }
@@ -159,3 +179,56 @@ def test_allow_adjacent_stays_for_same_room(client):
         )
         assert response.status_code == 200
         assert response.json()["status"] == "CONFIRMADA"
+
+
+def test_confirm_rejects_unknown_room(client):
+    payload = valid_reservation()
+    payload["room_id"] = str(uuid4())
+
+    created = client.post(
+        "/api/v1/reservations",
+        json=payload,
+    )
+    assert created.status_code == 201
+
+    reservation_id = created.json()["id"]
+
+    response = client.patch(
+        f"/api/v1/reservations/{reservation_id}/confirm"
+    )
+
+    assert response.status_code == 409
+    assert "no existe" in response.json()["detail"]
+
+    found = client.get(
+        f"/api/v1/reservations/{reservation_id}"
+    )
+    assert found.json()["status"] == "SOLICITADA"
+
+
+def test_confirm_rejects_out_of_order_room(client):
+    from src.api.dependencies import get_db
+
+    db_generator = app.dependency_overrides[get_db]()
+    session = next(db_generator)
+
+    try:
+        room = session.get(RoomModel, TEST_ROOM_ID)
+        room.status = RoomStatus.OUT_OF_ORDER
+        session.commit()
+    finally:
+        db_generator.close()
+
+    created = client.post(
+        "/api/v1/reservations",
+        json=valid_reservation(),
+    )
+
+    assert created.status_code == 201
+
+    response = client.patch(
+        f"/api/v1/reservations/{created.json()['id']}/confirm"
+    )
+
+    assert response.status_code == 409
+    assert "no está habilitada" in response.json()["detail"]

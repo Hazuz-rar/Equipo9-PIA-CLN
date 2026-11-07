@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Configura POSTGRES_PASSWORD en .env}
     ports:
       # Evita conflicto con PostgreSQL local, que suele usar 5432.
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -19,11 +19,14 @@ services:
   api:
     build: .
     environment:
-      APP_ENV: development
+      APP_ENV: ${APP_ENV:-development}
+      AUTH_SECRET: ${AUTH_SECRET:-}
+      CHECKIN_DATA_KEY: ${CHECKIN_DATA_KEY:-}
+      HOTEL_TIMEZONE: ${HOTEL_TIMEZONE:-}
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-hotel_user}:${POSTGRES_PASSWORD:?Configura POSTGRES_PASSWORD en .env}@db:5432/${POSTGRES_DB:-hotel_costa_azul}
     command: sh -c "alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port 8000"
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     depends_on:
       db:
         condition: service_healthy

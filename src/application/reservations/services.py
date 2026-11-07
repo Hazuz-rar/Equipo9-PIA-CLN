@@ -3,6 +3,7 @@
 
 from datetime import datetime
 from uuid import UUID, uuid4
+from src.application.ports.room_repository import RoomRepository
 
 from src.application.ports.reservation_repository import ReservationRepository
 from src.application.reservations.commands import (
@@ -29,9 +30,17 @@ from src.domain.reservations.value_objects import (
 
 
 class ReservationService:
-    def __init__(self, repository: ReservationRepository) -> None:
+    
+    def __init__(
+        self,
+        repository: ReservationRepository,
+        room_repository: RoomRepository,
+    ) -> None:
         self.repository = repository
-        self._availability = NoOverlappingActiveReservationsSpecification()
+        self.room_repository = room_repository
+        self._availability = (
+            NoOverlappingActiveReservationsSpecification()
+        )
 
     def create(self, command: CreateReservationCommand) -> Reservation:
         reservation = Reservation(
@@ -50,6 +59,21 @@ class ReservationService:
         reservation = self._get_reservation(command.reservation_id)
 
         self.repository.lock_room(reservation.room_id)
+
+
+        room = self.room_repository.get_by_id(
+            reservation.room_id
+        )
+
+        if room is None:
+            raise ValueError(
+                "La habitación no existe en el inventario."
+            )
+
+        if not room.can_accept_reservation():
+            raise ValueError(
+                "La habitación no está habilitada para reservarse."
+            )
 
         existing = self.repository.find_active_by_room_and_period(
             reservation.room_id,

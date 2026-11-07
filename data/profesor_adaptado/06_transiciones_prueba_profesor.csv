@@ -1,0 +1,21 @@
+﻿caso_id,operacion_id,accion_sugerida,estado_inicial,resultado_alumno,instrucciones
+HOT-S001,HOT-O001,completar,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S002,HOT-O002,cancelar,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S003,HOT-O003,repetir_aprobacion,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S004,HOT-O004,saltar_estado,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S005,HOT-O005,aprobar,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S006,HOT-O006,completar,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S007,HOT-O007,cancelar,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S008,HOT-O008,repetir_aprobacion,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S009,HOT-O009,saltar_estado,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S010,HOT-O010,aprobar,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S011,HOT-O011,completar,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S012,HOT-O012,cancelar,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S013,HOT-O013,repetir_aprobacion,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S014,HOT-O014,saltar_estado,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S015,HOT-O015,aprobar,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S016,HOT-O016,completar,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S017,HOT-O017,cancelar,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S018,HOT-O018,repetir_aprobacion,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S019,HOT-O019,saltar_estado,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion
+HOT-S020,HOT-O020,aprobar,SOLICITADA,PENDIENTE,Ejecutar la operacion y registrar evento o excepcion

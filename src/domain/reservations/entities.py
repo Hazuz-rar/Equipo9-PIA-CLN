@@ -22,6 +22,8 @@ class ReservationStatus(str, Enum):
     CHECK_IN = "CHECK_IN"
     CHECK_OUT = "CHECK_OUT"
     CANCELLED = "CANCELADA"
+    NO_SHOW = "NO_SHOW"
+    RELOCATED = "REUBICADA"
 
 
 class ReservationAction(str, Enum):
@@ -29,6 +31,9 @@ class ReservationAction(str, Enum):
     CHECK_IN = "REGISTRAR_CHECK_IN"
     CHECK_OUT = "REGISTRAR_CHECK_OUT"
     CANCEL = "CANCELAR"
+    POLICY_CANCEL = "CANCELAR_CON_POLITICA"
+    MARK_NO_SHOW = "MARCAR_NO_SHOW"
+    RELOCATE = "REUBICAR"
 
 
 class ReservationStateMachine:
@@ -37,6 +42,9 @@ class ReservationStateMachine:
     _TRANSITIONS = {
         (ReservationStatus.REQUESTED, ReservationAction.CONFIRM): ReservationStatus.CONFIRMED,
         (ReservationStatus.REQUESTED, ReservationAction.CANCEL): ReservationStatus.CANCELLED,
+        (ReservationStatus.CONFIRMED, ReservationAction.POLICY_CANCEL): ReservationStatus.CANCELLED,
+        (ReservationStatus.CONFIRMED, ReservationAction.MARK_NO_SHOW): ReservationStatus.NO_SHOW,
+        (ReservationStatus.CONFIRMED, ReservationAction.RELOCATE): ReservationStatus.RELOCATED,
         (ReservationStatus.CONFIRMED, ReservationAction.CHECK_IN): ReservationStatus.CHECK_IN,
         (ReservationStatus.CHECK_IN, ReservationAction.CHECK_OUT): ReservationStatus.CHECK_OUT,
     }
@@ -89,3 +97,18 @@ class Reservation:
             ReservationAction.CANCEL,
             "Solo una reserva solicitada puede cancelarse.",
         )
+
+    def cancel_with_policy(self) -> None:
+        """RN-04: el servicio debe calcular y registrar importe antes de invocar."""
+        self._apply(ReservationAction.POLICY_CANCEL,
+                    'Solo una reserva confirmada permite cancelación con política.')
+
+    def mark_no_show(self) -> None:
+        """RN-05: el caso de uso verifica plazo y garantía antes de invocar."""
+        self._apply(ReservationAction.MARK_NO_SHOW,
+                    'Solo una reserva confirmada puede ser No-Show.')
+
+    def relocate(self) -> None:
+        """RN-06: solo con evidencia de hotel aliado registrada por el caso de uso."""
+        self._apply(ReservationAction.RELOCATE,
+                    'Solo una reserva confirmada puede reubicarse.')

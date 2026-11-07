@@ -1,1 +1,2 @@
 from src.infrastructure.database.models.demo_csv_model import DemoCSVRecordModel
+from src.infrastructure.database.models.check_in_model import CheckInRecordModel

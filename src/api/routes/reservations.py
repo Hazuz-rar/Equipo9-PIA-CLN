@@ -6,6 +6,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from src.api.dependencies import get_db, get_reservation_service
+from src.core.security import legacy_role_guard
+from src.api.routes.exceptions import queue_availability
 from src.api.schemas.reservation import (
     ReservationCreate,
     ReservationResponse,
@@ -92,6 +94,7 @@ def get_reservation(
 def confirm_reservation(
     reservation_id: UUID,
     session: Session = Depends(get_db),
+    actor=Depends(legacy_role_guard('RESERVATIONS','RECEPTION','MANAGER_RECEPTION','MANAGER_OPERATIONS')),
 ):
     service = get_reservation_service(session)
 
@@ -99,6 +102,7 @@ def confirm_reservation(
         reservation = service.confirm(
             ConfirmReservationCommand(reservation_id=reservation_id)
         )
+        queue_availability(session, reservation.id.value, 'CONFIRMED', reservation.room_id.value)
         session.commit()
         return to_response(reservation)
     except ValueError as error:
@@ -118,6 +122,7 @@ def confirm_reservation(
 def cancel_reservation(
     reservation_id: UUID,
     session: Session = Depends(get_db),
+    actor=Depends(legacy_role_guard('RESERVATIONS','RECEPTION','MANAGER_RECEPTION','MANAGER_OPERATIONS')),
 ):
     service = get_reservation_service(session)
 
@@ -125,6 +130,7 @@ def cancel_reservation(
         reservation = service.cancel(
             CancelReservationCommand(reservation_id=reservation_id)
         )
+        queue_availability(session, reservation.id.value, 'CANCELLED', reservation.room_id.value)
         session.commit()
         return to_response(reservation)
     except ValueError as error:
@@ -147,36 +153,25 @@ def preview_individual_cancellation(
     requested_at: datetime,
     session: Session = Depends(get_db),
 ):
-    service = get_reservation_service(session)
+    """Previsualiza noches de penalización, sin modificar la reserva.
 
+    El offset de arrival_at debe ser el del hotel. Su zona horaria
+    permanece pendiente de definición en la documentación del negocio.
+    """
+    service = get_reservation_service(session)
     try:
         nights = service.preview_individual_cancellation(
             reservation_id=reservation_id,
             arrival_at=arrival_at,
             requested_at=requested_at,
         )
-
         return CancellationPreviewResponse(
             reservation_id=reservation_id,
             penalty_nights=nights,
         )
-
     except ValueError as error:
         if str(error) == "La reserva no existe.":
-            raise HTTPException(
-                status_code=404,
-                detail=str(error),
-            ) from error
-
-        if str(error) == (
-            "La reserva no admite previsualización de cancelación."
-        ):
-            raise HTTPException(
-                status_code=409,
-                detail=str(error),
-            ) from error
-
-        raise HTTPException(
-            status_code=422,
-            detail=str(error),
-        ) from error
+            raise HTTPException(status_code=404, detail=str(error)) from error
+        if str(error) == "La reserva no admite previsualización de cancelación.":
+            raise HTTPException(status_code=409, detail=str(error)) from error
+        raise HTTPException(status_code=422, detail=str(error)) from error

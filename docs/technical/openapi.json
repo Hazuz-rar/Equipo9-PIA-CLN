@@ -1,0 +1,2940 @@
+{
+  "components": {
+    "schemas": {
+      "AvailableRoomResponse": {
+        "properties": {
+          "base_rate": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Base Rate",
+            "type": "string"
+          },
+          "capacity": {
+            "title": "Capacity",
+            "type": "integer"
+          },
+          "currency": {
+            "title": "Currency",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "number": {
+            "title": "Number",
+            "type": "string"
+          },
+          "room_type": {
+            "title": "Room Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "room_type",
+          "capacity",
+          "base_rate",
+          "currency"
+        ],
+        "title": "AvailableRoomResponse",
+        "type": "object"
+      },
+      "CancellationPreviewResponse": {
+        "properties": {
+          "message": {
+            "default": "Vista previa: no se canceló la reserva ni se registraron cobros.",
+            "title": "Message",
+            "type": "string"
+          },
+          "penalty_nights": {
+            "title": "Penalty Nights",
+            "type": "integer"
+          },
+          "reservation_id": {
+            "format": "uuid",
+            "title": "Reservation Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reservation_id",
+          "penalty_nights"
+        ],
+        "title": "CancellationPreviewResponse",
+        "type": "object"
+      },
+      "CheckInDocumentRequest": {
+        "properties": {
+          "contact_details": {
+            "minLength": 1,
+            "title": "Contact Details",
+            "type": "string"
+          },
+          "fiscal_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fiscal Address"
+          },
+          "full_name": {
+            "minLength": 1,
+            "title": "Full Name",
+            "type": "string"
+          },
+          "guarantee_accepted": {
+            "title": "Guarantee Accepted",
+            "type": "boolean"
+          },
+          "invoice_requested": {
+            "default": false,
+            "title": "Invoice Requested",
+            "type": "boolean"
+          },
+          "nationality": {
+            "minLength": 1,
+            "title": "Nationality",
+            "type": "string"
+          },
+          "official_id_number": {
+            "minLength": 1,
+            "title": "Official Id Number",
+            "type": "string"
+          },
+          "official_id_valid_until": {
+            "format": "date",
+            "title": "Official Id Valid Until",
+            "type": "string"
+          }
+        },
+        "required": [
+          "full_name",
+          "official_id_number",
+          "official_id_valid_until",
+          "nationality",
+          "contact_details",
+          "guarantee_accepted"
+        ],
+        "title": "CheckInDocumentRequest",
+        "type": "object"
+      },
+      "ExtensionRequest": {
+        "properties": {
+          "guest_accepted": {
+            "title": "Guest Accepted",
+            "type": "boolean"
+          },
+          "new_check_out": {
+            "format": "date",
+            "title": "New Check Out",
+            "type": "string"
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "new_check_out",
+          "guest_accepted",
+          "reason"
+        ],
+        "title": "ExtensionRequest",
+        "type": "object"
+      },
+      "FolioMovementResponse": {
+        "properties": {
+          "amount": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Amount",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "amount"
+        ],
+        "title": "FolioMovementResponse",
+        "type": "object"
+      },
+      "FolioResponse": {
+        "properties": {
+          "balance": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Balance",
+            "type": "string"
+          },
+          "charges": {
+            "items": {
+              "$ref": "#/components/schemas/FolioMovementResponse"
+            },
+            "title": "Charges",
+            "type": "array"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "payments": {
+            "items": {
+              "$ref": "#/components/schemas/FolioMovementResponse"
+            },
+            "title": "Payments",
+            "type": "array"
+          },
+          "reservation_id": {
+            "format": "uuid",
+            "title": "Reservation Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "total_charges": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Total Charges",
+            "type": "string"
+          },
+          "total_payments": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Total Payments",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "reservation_id",
+          "status",
+          "charges",
+          "payments",
+          "total_charges",
+          "total_payments",
+          "balance"
+        ],
+        "title": "FolioResponse",
+        "type": "object"
+      },
+      "GroupCreate": {
+        "properties": {
+          "channel": {
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Channel",
+            "type": "string"
+          },
+          "check_in": {
+            "format": "date",
+            "title": "Check In",
+            "type": "string"
+          },
+          "check_out": {
+            "format": "date",
+            "title": "Check Out",
+            "type": "string"
+          },
+          "contract_reference": {
+            "maxLength": 150,
+            "minLength": 5,
+            "title": "Contract Reference",
+            "type": "string"
+          },
+          "customer_type": {
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Customer Type",
+            "type": "string"
+          },
+          "deposit_due_at": {
+            "format": "date-time",
+            "title": "Deposit Due At",
+            "type": "string"
+          },
+          "organizer": {
+            "maxLength": 150,
+            "minLength": 2,
+            "title": "Organizer",
+            "type": "string"
+          },
+          "room_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "minItems": 10,
+            "title": "Room Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "organizer",
+          "contract_reference",
+          "room_ids",
+          "check_in",
+          "check_out",
+          "deposit_due_at",
+          "channel",
+          "customer_type"
+        ],
+        "title": "GroupCreate",
+        "type": "object"
+      },
+      "GroupDeposit": {
+        "properties": {
+          "amount": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Amount"
+          },
+          "receipt_reference": {
+            "maxLength": 150,
+            "minLength": 5,
+            "title": "Receipt Reference",
+            "type": "string"
+          }
+        },
+        "required": [
+          "amount",
+          "receipt_reference"
+        ],
+        "title": "GroupDeposit",
+        "type": "object"
+      },
+      "GuaranteeRequest": {
+        "properties": {
+          "external_reference": {
+            "description": "Referencia tokenizada externa; NO tarjeta/CVV.",
+            "maxLength": 255,
+            "minLength": 3,
+            "title": "External Reference",
+            "type": "string"
+          },
+          "method": {
+            "maxLength": 80,
+            "minLength": 3,
+            "title": "Method",
+            "type": "string"
+          }
+        },
+        "required": [
+          "method",
+          "external_reference"
+        ],
+        "title": "GuaranteeRequest",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "IncidentRequest": {
+        "properties": {
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "title": "IncidentRequest",
+        "type": "object"
+      },
+      "LoginRequest": {
+        "properties": {
+          "password": {
+            "title": "Password",
+            "type": "string"
+          },
+          "username": {
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "LoginRequest",
+        "type": "object"
+      },
+      "OperationTime": {
+        "properties": {
+          "simulated_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Simulated At"
+          }
+        },
+        "title": "OperationTime",
+        "type": "object"
+      },
+      "PartnerConfirmation": {
+        "properties": {
+          "partner_booking_reference": {
+            "maxLength": 200,
+            "minLength": 5,
+            "title": "Partner Booking Reference",
+            "type": "string"
+          },
+          "similar_category_verified": {
+            "title": "Similar Category Verified",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "partner_booking_reference",
+          "similar_category_verified"
+        ],
+        "title": "PartnerConfirmation",
+        "type": "object"
+      },
+      "PaymentRequest": {
+        "properties": {
+          "amount": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Amount"
+          },
+          "description": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Description",
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "amount"
+        ],
+        "title": "PaymentRequest",
+        "type": "object"
+      },
+      "ReservationCreate": {
+        "properties": {
+          "check_in": {
+            "format": "date",
+            "title": "Check In",
+            "type": "string"
+          },
+          "check_out": {
+            "format": "date",
+            "title": "Check Out",
+            "type": "string"
+          },
+          "guest_id": {
+            "format": "uuid",
+            "title": "Guest Id",
+            "type": "string"
+          },
+          "room_id": {
+            "format": "uuid",
+            "title": "Room Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "guest_id",
+          "room_id",
+          "check_in",
+          "check_out"
+        ],
+        "title": "ReservationCreate",
+        "type": "object"
+      },
+      "ReservationQuoteRequest": {
+        "properties": {
+          "channel": {
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Channel",
+            "type": "string"
+          },
+          "customer_type": {
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Customer Type",
+            "type": "string"
+          },
+          "guest_accepted": {
+            "title": "Guest Accepted",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "channel",
+          "customer_type",
+          "guest_accepted"
+        ],
+        "title": "ReservationQuoteRequest",
+        "type": "object"
+      },
+      "ReservationResponse": {
+        "properties": {
+          "check_in": {
+            "format": "date",
+            "title": "Check In",
+            "type": "string"
+          },
+          "check_out": {
+            "format": "date",
+            "title": "Check Out",
+            "type": "string"
+          },
+          "guest_id": {
+            "format": "uuid",
+            "title": "Guest Id",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "room_id": {
+            "format": "uuid",
+            "title": "Room Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "guest_id",
+          "room_id",
+          "check_in",
+          "check_out",
+          "status"
+        ],
+        "title": "ReservationResponse",
+        "type": "object"
+      },
+      "RestoreRoomRequest": {
+        "properties": {
+          "requires_cleaning": {
+            "default": true,
+            "title": "Requires Cleaning",
+            "type": "boolean"
+          }
+        },
+        "title": "RestoreRoomRequest",
+        "type": "object"
+      },
+      "RoomChangeRequest": {
+        "properties": {
+          "new_room_id": {
+            "format": "uuid",
+            "title": "New Room Id",
+            "type": "string"
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 5,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "new_room_id",
+          "reason"
+        ],
+        "title": "RoomChangeRequest",
+        "type": "object"
+      },
+      "SeasonSpan": {
+        "properties": {
+          "end": {
+            "format": "date",
+            "title": "End",
+            "type": "string"
+          },
+          "name": {
+            "pattern": "^(alta|baja)$",
+            "title": "Name",
+            "type": "string"
+          },
+          "start": {
+            "format": "date",
+            "title": "Start",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "start",
+          "end"
+        ],
+        "title": "SeasonSpan",
+        "type": "object"
+      },
+      "TariffConfigRequest": {
+        "properties": {
+          "bar_by_room_and_season": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Bar By Room And Season",
+            "type": "object"
+          },
+          "channel_multipliers": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Channel Multipliers",
+            "type": "object"
+          },
+          "currency": {
+            "default": "MXN",
+            "pattern": "^MXN$",
+            "title": "Currency",
+            "type": "string"
+          },
+          "customer_multipliers": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                  "type": "string"
+                }
+              ]
+            },
+            "title": "Customer Multipliers",
+            "type": "object"
+          },
+          "seasons": {
+            "items": {
+              "$ref": "#/components/schemas/SeasonSpan"
+            },
+            "title": "Seasons",
+            "type": "array"
+          },
+          "weekend_multiplier": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 1.0,
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Weekend Multiplier"
+          }
+        },
+        "required": [
+          "bar_by_room_and_season",
+          "weekend_multiplier",
+          "channel_multipliers",
+          "customer_multipliers",
+          "seasons"
+        ],
+        "title": "TariffConfigRequest",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "VoucherRequest": {
+        "properties": {
+          "amount": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Amount"
+          },
+          "consumption_detail": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Consumption Detail",
+            "type": "string"
+          },
+          "guest_name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Guest Name",
+            "type": "string"
+          },
+          "guest_signature": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Guest Signature",
+            "type": "string"
+          },
+          "issued_at": {
+            "format": "date-time",
+            "title": "Issued At",
+            "type": "string"
+          },
+          "point_of_sale": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Point Of Sale",
+            "type": "string"
+          },
+          "room_number": {
+            "maxLength": 30,
+            "minLength": 1,
+            "title": "Room Number",
+            "type": "string"
+          },
+          "voucher_number": {
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Voucher Number",
+            "type": "string"
+          }
+        },
+        "required": [
+          "room_number",
+          "guest_name",
+          "guest_signature",
+          "issued_at",
+          "point_of_sale",
+          "consumption_detail",
+          "amount",
+          "voucher_number"
+        ],
+        "title": "VoucherRequest",
+        "type": "object"
+      },
+      "WalkProposal": {
+        "properties": {
+          "allied_hotel": {
+            "maxLength": 150,
+            "minLength": 3,
+            "title": "Allied Hotel",
+            "type": "string"
+          },
+          "courtesy_details": {
+            "maxLength": 500,
+            "minLength": 3,
+            "title": "Courtesy Details",
+            "type": "string"
+          },
+          "fare_difference": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Fare Difference"
+          },
+          "transport_details": {
+            "maxLength": 500,
+            "minLength": 3,
+            "title": "Transport Details",
+            "type": "string"
+          }
+        },
+        "required": [
+          "allied_hotel",
+          "transport_details",
+          "fare_difference",
+          "courtesy_details"
+        ],
+        "title": "WalkProposal",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "description": "API REST del sistema PMS del Hotel Costa Azul.",
+    "title": "Hotel Costa Azul API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Root  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Root",
+        "tags": [
+          "Root"
+        ]
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "operationId": "who_am_i_api_v1_auth_me_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Who Am I",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/v1/auth/token": {
+      "post": {
+        "operationId": "login_api_v1_auth_token_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Login",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/v1/folios/{folio_id}": {
+      "get": {
+        "operationId": "get_folio_api_v1_folios__folio_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "folio_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Folio Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FolioResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Folio",
+        "tags": [
+          "Folios"
+        ]
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "operationId": "health_check_api_v1_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Health Check Api V1 Health Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Verificar estado de la API",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/api/v1/reservations": {
+      "post": {
+        "operationId": "create_reservation_api_v1_reservations_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReservationCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Create Reservation",
+        "tags": [
+          "Reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/{reservation_id}": {
+      "get": {
+        "operationId": "get_reservation_api_v1_reservations__reservation_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Reservation",
+        "tags": [
+          "Reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/{reservation_id}/cancel": {
+      "patch": {
+        "operationId": "cancel_reservation_api_v1_reservations__reservation_id__cancel_patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Cancel Reservation",
+        "tags": [
+          "Reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/{reservation_id}/cancellation-preview": {
+      "get": {
+        "description": "Previsualiza noches de penalización, sin modificar la reserva.\n\nEl offset de arrival_at debe ser el del hotel. Su zona horaria\npermanece pendiente de definición en la documentación del negocio.",
+        "operationId": "preview_individual_cancellation_api_v1_reservations__reservation_id__cancellation_preview_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "arrival_at",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "title": "Arrival At",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "requested_at",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "title": "Requested At",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CancellationPreviewResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Preview Individual Cancellation",
+        "tags": [
+          "Reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/{reservation_id}/confirm": {
+      "patch": {
+        "operationId": "confirm_reservation_api_v1_reservations__reservation_id__confirm_patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Confirm Reservation",
+        "tags": [
+          "Reservations"
+        ]
+      }
+    },
+    "/api/v1/rooms/available": {
+      "get": {
+        "operationId": "list_available_rooms_api_v1_rooms_available_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "check_in",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Check In",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "check_out",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Check Out",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "room_type",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Room Type"
+            }
+          },
+          {
+            "in": "query",
+            "name": "guests",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "title": "Guests",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AvailableRoomResponse"
+                  },
+                  "title": "Response List Available Rooms Api V1 Rooms Available Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Available Rooms",
+        "tags": [
+          "Rooms"
+        ]
+      }
+    },
+    "/api/v1/staff/audit": {
+      "get": {
+        "operationId": "list_audit_api_v1_staff_audit_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "List Audit",
+        "tags": [
+          "Staff Operations"
+        ]
+      }
+    },
+    "/api/v1/staff/channels/pending": {
+      "get": {
+        "operationId": "pending_outbox_api_v1_staff_channels_pending_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Pending Outbox",
+        "tags": [
+          "Exception Policies"
+        ]
+      }
+    },
+    "/api/v1/staff/folios/{folio_id}": {
+      "get": {
+        "operationId": "read_folio_for_staff_api_v1_staff_folios__folio_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "folio_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Folio Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Read Folio For Staff",
+        "tags": [
+          "Staff Operations"
+        ]
+      }
+    },
+    "/api/v1/staff/folios/{folio_id}/charges": {
+      "post": {
+        "operationId": "post_charge_api_v1_staff_folios__folio_id__charges_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "folio_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Folio Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoucherRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Post Charge",
+        "tags": [
+          "Staff Operations"
+        ]
+      }
+    },
+    "/api/v1/staff/folios/{folio_id}/payments": {
+      "post": {
+        "operationId": "post_payment_api_v1_staff_folios__folio_id__payments_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "folio_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Folio Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Post Payment",
+        "tags": [
+          "Staff Operations"
+        ]
+      }
+    },
+    "/api/v1/staff/groups": {
+      "post": {
+        "operationId": "create_group_api_v1_staff_groups_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Create Group",
+        "tags": [
+          "Group Reservations"
+        ]
+      }
+    },
+    "/api/v1/staff/groups/{group_id}/cancel": {
+      "post": {
+        "operationId": "cancel_group_api_v1_staff_groups__group_id__cancel_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "group_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Group Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Cancel Group",
+        "tags": [
+          "Group Reservations"
+        ]
+      }
+    },
+    "/api/v1/staff/groups/{group_id}/confirm-deposit": {
+      "post": {
+        "operationId": "confirm_group_deposit_api_v1_staff_groups__group_id__confirm_deposit_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "group_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Group Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupDeposit"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Confirm Group Deposit",
+        "tags": [
+          "Group Reservations"
+        ]
+      }
+    },
+    "/api/v1/staff/incidents/{incident_id}/resolve": {
+      "post": {
+        "operationId": "resolve_incident_api_v1_staff_incidents__incident_id__resolve_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "incident_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Incident Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Resolve Incident",
+        "tags": [
+          "Staff Operations"
+        ]
+      }
+    },
+    "/api/v1/staff/reports/daily": {
+      "get": {
+        "operationId": "daily_report_api_v1_staff_reports_daily_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "target_date",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Target Date",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Daily Report",
+        "tags": [
+          "Reports"
+        ]
+      }
+    },
+    "/api/v1/staff/reports/weekly": {
+      "get": {
+        "operationId": "weekly_report_api_v1_staff_reports_weekly_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "start_date",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Start Date",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Weekly Report",
+        "tags": [
+          "Reports"
+        ]
+      }
+    },
+    "/api/v1/staff/reservations/{reservation_id}/cancel-policy": {
+      "post": {
+        "operationId": "cancellation_with_policy_api_v1_staff_reservations__reservation_id__cancel_policy_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Cancellation With Policy",
+        "tags": [
+          "Exception Policies"
+        ]
+      }
+    },
+    "/api/v1/staff/reservations/{reservation_id}/change-room": {
+      "post": {
+        "operationId": "change_room_api_v1_staff_reservations__reservation_id__change_room_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoomChangeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Change Room",
+        "tags": [
+          "Stay Changes"
+        ]
+      }
+    },
+    "/api/v1/staff/reservations/{reservation_id}/check-in": {
+      "post": {
+        "operationId": "check_in_api_v1_staff_reservations__reservation_id__check_in_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OperationTime"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Check In",
+        "tags": [
+          "Staff Operations"
+        ]
+      }
+    },
+    "/api/v1/staff/reservations/{reservation_id}/check-in-documentation": {
+      "post": {
+        "operationId": "register_documentation_api_v1_staff_reservations__reservation_id__check_in_documentation_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckInDocumentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Register Documentation",
+        "tags": [
+          "Staff Operations"
+        ]
+      }
+    },
+    "/api/v1/staff/reservations/{reservation_id}/check-out": {
+      "post": {
+        "operationId": "check_out_api_v1_staff_reservations__reservation_id__check_out_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OperationTime"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Check Out",
+        "tags": [
+          "Staff Operations"
+        ]
+      }
+    },
+    "/api/v1/staff/reservations/{reservation_id}/extend": {
+      "post": {
+        "operationId": "extend_stay_api_v1_staff_reservations__reservation_id__extend_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtensionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Extend Stay",
+        "tags": [
+          "Stay Changes"
+        ]
+      }
+    },
+    "/api/v1/staff/reservations/{reservation_id}/guarantee": {
+      "post": {
+        "operationId": "record_guarantee_api_v1_staff_reservations__reservation_id__guarantee_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuaranteeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Record Guarantee",
+        "tags": [
+          "Exception Policies"
+        ]
+      }
+    },
+    "/api/v1/staff/reservations/{reservation_id}/late-checkout-charge": {
+      "post": {
+        "operationId": "apply_late_checkout_charge_api_v1_staff_reservations__reservation_id__late_checkout_charge_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OperationTime"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Apply Late Checkout Charge",
+        "tags": [
+          "Staff Operations"
+        ]
+      }
+    },
+    "/api/v1/staff/reservations/{reservation_id}/no-show": {
+      "post": {
+        "operationId": "mark_no_show_api_v1_staff_reservations__reservation_id__no_show_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Mark No Show",
+        "tags": [
+          "Exception Policies"
+        ]
+      }
+    },
+    "/api/v1/staff/reservations/{reservation_id}/possible-duplicates": {
+      "get": {
+        "operationId": "possible_duplicates_api_v1_staff_reservations__reservation_id__possible_duplicates_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Possible Duplicates",
+        "tags": [
+          "Stay Changes"
+        ]
+      }
+    },
+    "/api/v1/staff/reservations/{reservation_id}/walk-plan": {
+      "post": {
+        "operationId": "plan_walk_api_v1_staff_reservations__reservation_id__walk_plan_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WalkProposal"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Plan Walk",
+        "tags": [
+          "Overbooking / Walk"
+        ]
+      }
+    },
+    "/api/v1/staff/rooms/dirty": {
+      "get": {
+        "operationId": "pending_cleaning_api_v1_staff_rooms_dirty_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Pending Cleaning",
+        "tags": [
+          "Staff Operations"
+        ]
+      }
+    },
+    "/api/v1/staff/rooms/{room_id}/clean": {
+      "post": {
+        "operationId": "finish_cleaning_api_v1_staff_rooms__room_id__clean_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "room_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Room Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Finish Cleaning",
+        "tags": [
+          "Staff Operations"
+        ]
+      }
+    },
+    "/api/v1/staff/rooms/{room_id}/inspect": {
+      "post": {
+        "description": "RF-07: registrar revisión de una habitación ya marcada como limpia.",
+        "operationId": "inspect_room_api_v1_staff_rooms__room_id__inspect_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "room_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Room Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Inspect Room",
+        "tags": [
+          "Staff Operations"
+        ]
+      }
+    },
+    "/api/v1/staff/rooms/{room_id}/out-of-service": {
+      "post": {
+        "operationId": "report_incident_api_v1_staff_rooms__room_id__out_of_service_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "room_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Room Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IncidentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Report Incident",
+        "tags": [
+          "Staff Operations"
+        ]
+      }
+    },
+    "/api/v1/staff/rooms/{room_id}/restore": {
+      "post": {
+        "operationId": "restore_room_api_v1_staff_rooms__room_id__restore_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "room_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Room Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RestoreRoomRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Restore Room",
+        "tags": [
+          "Staff Operations"
+        ]
+      }
+    },
+    "/api/v1/staff/tariffs/configuration": {
+      "post": {
+        "operationId": "set_tariffs_api_v1_staff_tariffs_configuration_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TariffConfigRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Set Tariffs",
+        "tags": [
+          "Tariffs"
+        ]
+      }
+    },
+    "/api/v1/staff/tariffs/quote": {
+      "get": {
+        "operationId": "quote_room_api_v1_staff_tariffs_quote_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "room_type",
+            "required": true,
+            "schema": {
+              "title": "Room Type",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "check_in",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Check In",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "check_out",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Check Out",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "channel",
+            "required": true,
+            "schema": {
+              "title": "Channel",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "customer_type",
+            "required": true,
+            "schema": {
+              "title": "Customer Type",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Quote Room",
+        "tags": [
+          "Tariffs"
+        ]
+      }
+    },
+    "/api/v1/staff/tariffs/reservations/{reservation_id}/accept-quote": {
+      "post": {
+        "operationId": "accept_reservation_quote_api_v1_staff_tariffs_reservations__reservation_id__accept_quote_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reservation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reservation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReservationQuoteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Accept Reservation Quote",
+        "tags": [
+          "Tariffs"
+        ]
+      }
+    },
+    "/api/v1/staff/walk-cases/{walk_id}/confirm-partner": {
+      "post": {
+        "operationId": "confirm_partner_api_v1_staff_walk_cases__walk_id__confirm_partner_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "walk_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Walk Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PartnerConfirmation"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Confirm Partner",
+        "tags": [
+          "Overbooking / Walk"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const F=require('../validation.js');
+const u1='da11bd48-6f77-44b3-a7e8-505d167b35ee';
+const u2='98ec137c-0c50-48a9-a97a-5f4f0e0b9ad0';
+test('UUID válido',()=>assert.equal(F.validUUID(u1),true));
+test('UUID inválido',()=>assert.equal(F.validUUID('cualquier cosa'),false));
+test('UUID obligatorio',()=>assert.throws(()=>F.requireUUID('abc'),/UUID/));
+test('Fechas posteriores',()=>assert.deepEqual(F.dates('2026-12-10','2026-12-13'),{check_in:'2026-12-10',check_out:'2026-12-13'}));
+test('No invertir fechas',()=>assert.throws(()=>F.dates('2026-12-13','2026-12-10'),/posterior/));
+test('No aceptar fecha igual',()=>assert.throws(()=>F.dates('2026-12-10','2026-12-10'),/posterior/));
+test('Diez UUID distintos',()=>{
+ const ids=Array.from({length:10},(_,i)=>`00000000-0000-4000-8000-${(i+1).toString(16).padStart(12,'0')}`);
+ assert.deepEqual(F.roomIds(ids.join('\n')),ids);
+});
+test('Evitar UUID duplicados',()=>assert.throws(()=>F.roomIds(Array(10).fill(u1).join(',')),/duplicadas/));
+test('Mínimo de grupo',()=>assert.throws(()=>F.roomIds(`${u1},${u2}`),/al menos 10/));
+test('Cantidad inválida',()=>assert.throws(()=>F.roomIds(`${u1},INVALID` ,2),/UUID válidos/));
+test('Importe positivo con dos decimales',()=>assert.equal(F.amount('1350.50'),'1350.50'));
+test('Importe no negativo',()=>assert.equal(F.amount('0','Diferencia',true),'0'));
+test('Rechazar importe negativo',()=>assert.throws(()=>F.amount('-10'),/número/));
+test('Rechazar importe de tres decimales',()=>assert.throws(()=>F.amount('10.001'),/dos decimales/));
+test('Fecha-hora UTC válida',()=>assert.match(F.localDateTimeISO('2026-12-10T15:30'),/Z$/));
+test('Fecha-hora inválida',()=>assert.throws(()=>F.localDateTimeISO('incorrecta'),/fecha y hora/));
+test('Tarifas con JSON inválido',()=>assert.throws(()=>F.objectJSON('{'),/JSON/));
+test('Tarifas sin temporadas',()=>assert.throws(()=>F.objectJSON(JSON.stringify({bar_by_room_and_season:{},weekend_multiplier:1.3,channel_multipliers:{},customer_multipliers:{},seasons:[]})),/temporada/));
+test('Tarifas válidas en forma pero no avaladas',()=>{
+ const v=F.objectJSON(JSON.stringify({currency:'MXN',bar_by_room_and_season:{'Estándar|baja':'1234'},weekend_multiplier:1.1,channel_multipliers:{'directo':1},customer_multipliers:{'individual':1},seasons:[{name:'baja',start:'2026-12-01',end:'2026-12-31'}]}));
+ assert.equal(v.currency,'MXN');
+});
